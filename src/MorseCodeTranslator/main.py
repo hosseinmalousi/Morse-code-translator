@@ -1,6 +1,8 @@
 from textual.app import App,ComposeResult
+from textual.containers import ScrollableContainer ,Horizontal
 from textual.binding import Binding
-from textual.widgets import Label, Footer ,Button
+from textual.widgets import Static, Footer ,Button,Header
+from home import Home
 
 class MorseCodeTranslator(App):
     CSS_PATH = "./style.css"
@@ -10,10 +12,10 @@ class MorseCodeTranslator(App):
     ]
     
     def compose(self) -> ComposeResult:
-        yield Label("Hello, World!")
-        yield Button("Text")
-        yield Button("Morse")
+        yield Header(show_clock=True)
         yield Footer()
+        yield Home()
+        
 
 def main():
     MorseCodeTranslator().run()
