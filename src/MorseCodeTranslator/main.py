@@ -3,7 +3,7 @@ from textual.containers import ScrollableContainer ,Horizontal
 from textual.binding import Binding
 from textual.widgets import Static, Footer ,Button,Header
 from home import Home
-
+from text_morse import TextMorsePage
 class MorseCodeTranslator(App):
     CSS_PATH = "./style.css"
     
@@ -16,6 +16,7 @@ class MorseCodeTranslator(App):
         yield Header(show_clock=True)
         yield Footer()
         yield Home()
+        yield TextMorsePage()
         
 
 def main():
