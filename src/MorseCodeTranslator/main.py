@@ -12,6 +12,7 @@ class MorseCodeTranslator(App):
     ]
     
     def compose(self) -> ComposeResult:
+        self.title = "MorseCode trasnlator"
         yield Header(show_clock=True)
         yield Footer()
         yield Home()
