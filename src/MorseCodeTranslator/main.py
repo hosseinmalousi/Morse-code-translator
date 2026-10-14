@@ -1,14 +1,31 @@
-from textual import on,events
+from textual import on,events ,getters
 from textual.app import App,ComposeResult
 from textual.containers import ScrollableContainer ,Horizontal
 from textual.screen import Screen
 from textual.binding import Binding
 from textual.widgets import Static, Footer ,Button,Header ,Input
 
-class TextMorsePage(Screen): 
+class TextMorsePage(Screen):
+    #finishing this page
+    
+    
+    staticMessage = getters.query_one("Static")
+    
+    #placing the user input to a func for translation 
+     
     def compose(self) -> ComposeResult:
+        #adding id name for button and input for better readablity 
         yield Input(placeholder="Hello World")
+        #adding a event for saving user input in the the var like enter 
         yield Button("Translate","success")
+        yield Static("hihih")
+    
+    @on(Input.Submitted)
+    def on_submit(self,event:Input.Submitted):
+        #here i must call teh func for translating to morse code 
+        value = event.value
+        self.staticMessage.update(value)
+        
 
 class MorseCodeTranslator(App):
     CSS_PATH = "./style.css"
