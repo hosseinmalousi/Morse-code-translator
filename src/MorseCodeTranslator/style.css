@@ -1,0 +1,10 @@
+Horizontal {
+    width: 100%;
+    height:auto;
+}
+Horizontal #text_container {
+    align:center middle;
+}
+.inputs {
+    width:50%;
+}

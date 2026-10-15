@@ -4,35 +4,49 @@ from textual.screen import Screen
 from textual.containers import ScrollableContainer ,Horizontal
 from textual.binding import Binding
 from textual.widgets import Static, Footer ,Button,Header ,Input
+import string
 
-
-
+# STR_UNDERCASE=string.ascii_lowercase
+MORSECODE_DIC = {"a":".-","b":"-...","c":"-.-.","d":"-..","e":".",
+                "f":"..-.","g":"--.","h":"....","i":"..","j":".---",
+                "k":"-.-","l":".-..","m":"--","n":"-.","o":"---","p":".--.",
+                "q":"--.-","r":".-.","s":"...","t":"-","u":"..-","v":"...-","w":".--",
+                "x":"-..-","y":"-.--","z":"--.."}
 
 
 class MorseTextPage(Screen):
     def compose(self) -> ComposeResult:
-        yield Static("Morse to text")
+        yield Input(placeholder="what is ur code")
 
 class TextMorsePage(Screen):
-    #finishing this page
-    
-    
-    staticMessage = getters.query_one("Static")
-    
-    #placing the user input to a func for translation 
+    staticMessage = getters.query_one("#translated")
      
     def compose(self) -> ComposeResult:
         #adding id name for button and input for better readablity 
-        yield Input(placeholder="Hello World")
-        #adding a event for saving user input in the the var like enter 
-        yield Button("Translate","success")
-        yield Static("hihih")
+        with Horizontal(id="text_container"):
+            yield Input(placeholder="Hello World",valid_empty=False,classes="inputs") 
+            yield Button("Translate","success")
+        yield Static("It translate to ...",id="translated")
+    
+    def translateTextToMorse(self,text) -> list[str]:
+        translated : list[str]=[]
+        for char in text:
+            if char == " ":
+                translated.append("/")
+                continue
+            elif char not in string.ascii_lowercase:
+                self.notify(f"the {char} is not valid",severity="error")
+                translated.append("#")
+                break
+            translated.append(MORSECODE_DIC[char])
+        return translated
     
     @on(Input.Submitted)
     def on_submit(self,event:Input.Submitted):
         #here i must call teh func for translating to morse code 
-        value = event.value
-        self.staticMessage.update(value)
+        value = event.value.lower()
+        translated = self.translateTextToMorse(value)
+        self.staticMessage.update(" ".join(translated))
         
 
 class MorseCodeTranslator(App):
