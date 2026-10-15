@@ -19,13 +19,15 @@ class MorseTextPage(Screen):
         yield Input(placeholder="what is ur code")
 
 class TextMorsePage(Screen):
-    staticMessage = getters.query_one("#translated")
+    userText : str =getters.query_one("#textInput")
+    staticMessage : str = getters.query_one("#translated")
      
     def compose(self) -> ComposeResult:
         #adding id name for button and input for better readablity 
         with Horizontal(id="text_container"):
-            yield Input(placeholder="Hello World",valid_empty=False,classes="inputs") 
-            yield Button("Translate","success")
+            yield Input(placeholder="Hello World",valid_empty=False,classes="inputs",id="textInput") 
+            yield Button("Translate","success",id="translateBtn")
+            yield Button("Home","default",id="homeBtn")
         yield Static("It translate to ...",id="translated")
     
     def translateTextToMorse(self,text) -> list[str]:
@@ -41,12 +43,18 @@ class TextMorsePage(Screen):
             translated.append(MORSECODE_DIC[char])
         return translated
     
-    @on(Input.Submitted)
-    def on_submit(self,event:Input.Submitted):
-        #here i must call teh func for translating to morse code 
-        value = event.value.lower()
+    @on(Button.Pressed,"#translateBtn")
+    def on_translate(self) -> None:
+        value = self.userText.value.lower()
         translated = self.translateTextToMorse(value)
         self.staticMessage.update(" ".join(translated))
+    
+    @on(Input.Submitted)
+    def on_submit(self,event:Input.Submitted) -> None: 
+        # value = event.value.lower()
+        # translated = self.translateTextToMorse(value)
+        # self.staticMessage.update(" ".join(translated))
+        self.on_translate()
         
 
 class MorseCodeTranslator(App):
@@ -70,6 +78,10 @@ class MorseCodeTranslator(App):
     @on(Button.Pressed,"#text")
     def show_text_morsePage(self):
         self.push_screen("textMorsePage")
+    
+    @on(Button.Pressed,"#homeBtn")
+    def on_homeBtn(self,):
+        self.pop_screen()
         
     @on(Button.Pressed,"#morse")
     def show_morse_textPage(self):
