@@ -1,9 +1,17 @@
 from textual import on,events ,getters
 from textual.app import App,ComposeResult
-from textual.containers import ScrollableContainer ,Horizontal
 from textual.screen import Screen
+from textual.containers import ScrollableContainer ,Horizontal
 from textual.binding import Binding
 from textual.widgets import Static, Footer ,Button,Header ,Input
+
+
+
+
+
+class MorseTextPage(Screen):
+    def compose(self) -> ComposeResult:
+        yield Static("Morse to text")
 
 class TextMorsePage(Screen):
     #finishing this page
@@ -29,7 +37,7 @@ class TextMorsePage(Screen):
 
 class MorseCodeTranslator(App):
     CSS_PATH = "./style.css"
-    SCREENS ={"textMorsePage":TextMorsePage}
+    SCREENS ={"textMorsePage":TextMorsePage,"morseTextPage":MorseTextPage}
     BINDINGS = [
         Binding(key="q",action="quit",description="Quit the app")
     ]
@@ -48,6 +56,10 @@ class MorseCodeTranslator(App):
     @on(Button.Pressed,"#text")
     def show_text_morsePage(self):
         self.push_screen("textMorsePage")
+        
+    @on(Button.Pressed,"#morse")
+    def show_morse_textPage(self):
+        self.push_screen("morseTextPage")
         
     
 def main():
